@@ -47,12 +47,14 @@ Locust simulates user behavior through its "user classes". Here's how it operate
    - However, for understanding raw system capacity, this behavior becomes a limitation
    - You can't push the system to its actual limits because you're bound by simulated user behavior
 
-> **Note:** While Locust excels at simulating real user behavior, it's challenging to use it for determining exact system limits. This is because:
+> [!IMPORTANT]
+> While Locust excels at simulating real user behavior, it's challenging to use it for determining exact system limits. This is because:
 > 1. The actual request rate depends on response times and simulated user behavior
 > 2. Network capacity of the test machine affects results
 > 3. Resource consumption on the test machine can become a bottleneck before the system under test
 
-> **Important:** Locust is designed to answer questions like "How does my system behave under realistic user load?" rather than "What's the maximum RPS my system can handle?"
+> [!NOTE]
+> **Locust is designed to answer questions like "How does my system behave under realistic user load?" rather than "What's the maximum RPS my system can handle?"**
 
 ## Limitations with JMeter
 JMeter operates similarly to Locust in terms of the request-response cycle. While it uses a different technical approach (threads vs event-driven), the fundamental limitations are indeed similar:
