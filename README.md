@@ -131,137 +131,66 @@ Parameters:
 
 ### GET Request Test
 ```python
-import asyncio
-from stress_lab import load_test, print_statistics, plot_load_test_results
+from stress_lab import StressLab
 
-# URL, headers and request parameters
-url = "..."
-method = "GET"
-headers = {"Authorization": "Bearer ..."}
+token = "..."
+headers = {"Authorization": f"Bearer {token}"}
 
-# Test parameters
-requests_per_second = 10
-num_times = 5
-wait_time = 1
-ttfb_only = True
 
-# Run the load test
-stats = asyncio.run(
-    load_test(
-        url=url,
-        method=method,
-        headers=headers,
-        requests_per_second=requests_per_second,
-        num_times=num_times,
-        wait_time=wait_time,
-        ttfb_only=ttfb_only,
-    )
+stress_test = StressLab(
+    url="...",
+    method="GET",
+    headers=headers,
+    requests_per_second=5,
+    num_times=2,
+    wait_time=1,
+    ttfb_only=True,
 )
 
-# Print statistics
-print_statistics(stats=stats)
 
-# Plot the results
-plot_load_test_results(
-    url=url,
-    stats=stats,
-    requests_per_second=requests_per_second,
-    num_times=num_times,
-    wait_time=wait_time,
-)
+# Run the test
+stress_test.run()
+
+# Show results
+fig = stress_test.plot_results()
+
+# Save results
+stress_test.save_results(fig=fig, output_dir="results")
 
 ```
-
-***Example Output***
-
-```bash
-Test Summary:
-Total Duration: 13.56 seconds
-Total Requests: 50
-Total Success: 50
-Total Failures: 0
-Requests per Second: 3.69
-
-Response Time Statistics:
-Avg TTFB: 1.454s
-Max TTFB: 2.171s
-Min TTFB: 0.674s
-Median TTFB: 1.459s
-
-Percentiles:
-90th Percentile TTFB: 1.738s
-95th Percentile TTFB: 2.127s
-99th Percentile TTFB: 2.165s
-```
-
-![GET Request Stats Plot](./stats-plot.png)
 
 ### POST Request Test
 ```python
-import asyncio
-from stress_lab import load_test, print_statistics, plot_load_test_results
-
-# URL, headers and request parameters
-url = "..."
-method = "POST"
+from stress_lab import StressLab
 
 json_data = {
-   "name": "Apple MacBook Pro 16",
-   "data": {
-      "year": 2019,
-      "price": 1849.99,
-      "CPU model": "Intel Core i9",
-      "Hard disk size": "1 TB"
-   }
+    "name": "Apple MacBook Pro 16",
+    "data": {
+        "year": 2019,
+        "price": 1849.99,
+        "CPU model": "Intel Core i9",
+        "Hard disk size": "1 TB",
+    },
 }
 
-# Run the load test
-stats = asyncio.run(
-    load_test(
-        url=url,
-        method=method,
-        json_data=json_data,
-        requests_per_second=5,
-        num_times=5,
-        wait_time=1,
-        ttfb_only=True,
-    )
-)
 
-# Print statistics
-print_statistics(stats=stats)
-
-# Plot the results
-plot_load_test_results(
-    url=url,
-    stats=stats,
+stress_test = StressLab(
+    url="https://api.restful-api.dev/objects",
+    method="POST",
+    json_data=json_data,
     requests_per_second=2,
     num_times=3,
     wait_time=1,
+    ttfb_only=True,
 )
+
+
+# Run the test
+stress_test.run()
+
+# Show results
+fig = stress_test.plot_results()
+
+# Save results
+stress_test.save_results(fig=fig, output_dir="results")
 ```
-
-***Example Output***
-
-```bash
-
-Test Summary:
-Total Duration: 5.41 seconds
-Total Requests: 6
-Total Success: 6
-Total Failures: 0
-Requests per Second: 1.11
-
-Response Time Statistics:
-Avg TTFB: 0.695s
-Max TTFB: 1.111s
-Min TTFB: 0.166s
-Median TTFB: 0.807s
-
-Percentiles:
-90th Percentile TTFB: 1.081s
-95th Percentile TTFB: 1.096s
-99th Percentile TTFB: 1.108s
-```
-
-![POST Request Stats Plot](./post-request-stats-plot.png)
