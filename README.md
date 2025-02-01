@@ -47,12 +47,6 @@ Locust simulates user behavior through its "user classes". Here's how it operate
    - However, for understanding raw system capacity, this behavior becomes a limitation
    - You can't push the system to its actual limits because you're bound by simulated user behavior
 
-> [!IMPORTANT]
-> While Locust excels at simulating real user behavior, it's challenging to use it for determining exact system limits. This is because:
-> 1. The actual request rate depends on response times and simulated user behavior
-> 2. Network capacity of the test machine affects results
-> 3. Resource consumption on the test machine can become a bottleneck before the system under test
-
 > [!NOTE]
 > **Locust is designed to answer questions like "How does my system behave under realistic user load?" rather than "What's the maximum RPS my system can handle?"**
 
@@ -116,6 +110,58 @@ Stress Lab provides several key features for precise system stress testing:
      * Average response rate
      * Target RPS reference lines
      * Test parameters summary
+
+--
+
+### TTFB-Only Mode
+- **What it tests**: Server's initial response capability
+- **Best for**: 
+  * Large response payloads (>500KB)
+  * Testing raw server processing
+  * Quick performance assessments
+- **Limitations**:
+  * Doesn't test complete response delivery
+  * May not reflect real-world load as server doesn't send complete response
+  * TCP connections are closed early
+
+### Complete Response Mode
+- **What it tests**: Full request-response cycle
+- **Best for**:
+  * Small to medium responses (<500KB)
+  * End-to-end performance testing
+  * Real-world usage simulation
+- **Limitations**:
+  * Results depend on client's network capacity
+  * May create artificial bottlenecks on test machine
+  * Not suitable for large responses unless running on high-bandwidth infrastructure
+
+--
+
+## Test Scales and Infrastructure Requirements
+
+### Small Scale Tests (Development/Quick Tests)
+- **Environment**: Local machine
+- **Best Practices**:
+  * Use TTFB mode for large responses
+  * Complete response mode for small payloads (<500KB)
+  * Good for initial API performance assessment
+
+### Medium Scale Tests
+- **Environment**: Single high-bandwidth instance (e.g., EC2)
+- **Best Practices**:
+  * Complete response testing up to 2MB
+  * Monitor machine resources
+  * Run in same region as target system
+
+### Large Scale Tests
+- **Environment**: Multiple distributed instances
+- **Requirements**:
+  * High-bandwidth infrastructure
+  * Result aggregation system
+  * Geographic distribution if needed
+- **Note**: Currently not supported in StressLab. Requires distributed setup.
+
+--
 
 ## How to use
 Parameters:
